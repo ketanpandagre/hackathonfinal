@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fire Shield - Monitoring System</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#FF4D4D',
+secondary: '#FF8C00',
+dark: {
+DEFAULT: '#1A1A1A',
+lighter: '#2A2A2A',
+},
+light: {
+DEFAULT: '#FFFFFF',
+dimmed: '#E0E0E0',
+}
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+},
+fontFamily: {
+'sans': ['Inter', 'sans-serif'],
+}
+}
+}
+}
+</script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+.success-animation {
+animation: scaleIn 0.5s ease-out;
+}
+@keyframes scaleIn {
+0% { transform: scale(0.8); opacity: 0; }
+100% { transform: scale(1); opacity: 1; }
+}
+body {
+background: linear-gradient(to bottom, #1A1A1A, #232323);
+}
+.glass-effect {
+background: rgba(42, 42, 42, 0.9);
+backdrop-filter: blur(10px);
+}
+</style>
+</head>
+<body class="min-h-screen text-light-dimmed">
+<header class="glass-effect border-b border-gray-800">
+<div class="max-w-7xl mx-auto px-6 py-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<div class="flex items-center">
+<i class="ri-fire-fill text-primary text-3xl"></i>
+<span class="font-['Pacifico'] text-2xl text-light-default ml-2">Fire Shield</span>
+</div>
+<p class="text-light-dimmed text-sm">Monitoring & Automation System</p>
+</div>
+<div class="flex items-center space-x-6">
+<div class="flex items-center space-x-2">
+<i class="ri-global-line"></i>
+<select class="bg-transparent text-light-default border-none text-sm cursor-pointer">
+<option value="en">English</option>
+<option value="es">Español</option>
+<option value="fr">Français</option>
+</select>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 bg-green-500 rounded-full"></span>
+<span class="text-green-500 text-sm">Systems Online</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class="max-w-4xl mx-auto p-6">
+<nav class="flex items-center mb-8 text-sm">
+<a href="#" class="text-light-dimmed hover:text-primary">Dashboard</a>
+<i class="ri-arrow-right-s-line mx-2 text-gray-600"></i>
+<a href="#" class="text-light-dimmed hover:text-primary">Schedule Inspection</a>
+<i class="ri-arrow-right-s-line mx-2 text-gray-600"></i>
+<span class="text-primary">Success</span>
+</nav>
+<div class="success-animation glass-effect rounded-lg shadow-lg p-8 mb-8 text-center border border-gray-800">
+<div class="w-20 h-20 mx-auto mb-6 bg-primary bg-opacity-20 rounded-full flex items-center justify-center">
+<i class="ri-checkbox-circle-fill text-primary text-4xl"></i>
+</div>
+<h1 class="text-3xl font-bold text-light-default mb-4">Inspection Scheduled Successfully!</h1>
+<p class="text-light-dimmed mb-6">Your inspection request has been successfully submitted. You will receive an update once it is reviewed.</p>
+</div>
+<div class="glass-effect rounded-lg shadow-lg p-8 mb-8 border border-gray-800">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-xl font-semibold text-light-default">Inspection Details</h2>
+<span class="px-4 py-1 bg-orange-100 text-orange-600 rounded-full text-sm font-medium">Pending</span>
+</div>
+<div class="grid grid-cols-2 gap-6">
+<div>
+<p class="text-sm text-light-dimmed mb-1">Reference ID</p>
+<div class="flex items-center">
+<span class="text-light-default font-medium">INS-2025-0305-001</span>
+<button class="ml-2 text-primary hover:text-primary/80 cursor-pointer">
+<i class="ri-file-copy-line"></i>
+</button>
+</div>
+</div>
+<div>
+<p class="text-sm text-light-dimmed mb-1">Scheduled Date & Time</p>
+<p class="text-light-default">March 12, 2025 at 10:00 AM</p>
+</div>
+<div class="col-span-2">
+<p class="text-sm text-light-dimmed mb-1">Building Location</p>
+<p class="text-light-default">Riverside Business Center</p>
+<p class="text-light-dimmed">123 Innovation Drive, Suite 400, Silicon Valley, CA 94025</p>
+</div>
+<div>
+<p class="text-sm text-light-dimmed mb-1">Inspector</p>
+<p class="text-light-dimmed italic">To be assigned</p>
+</div>
+<div>
+<p class="text-sm text-light-dimmed mb-1">Expected Approval Time</p>
+<p class="text-light-default">2-3 business days</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-8">
+<button class="flex items-center justify-center bg-primary text-light-default py-3 px-4 rounded-button hover:bg-primary/90 transition-colors">
+<i class="ri-file-list-line mr-2"></i>
+View Inspection Details
+</button>
+<button class="flex items-center justify-center glass-effect border border-gray-700 text-light-dimmed py-3 px-4 rounded-button hover:bg-dark-lighter transition-colors">
+<i class="ri-download-line mr-2"></i>
+Download Confirmation
+</button>
+<button class="flex items-center justify-center bg-secondary text-light-default py-3 px-4 rounded-button hover:bg-secondary/90 transition-colors">
+<i class="ri-add-line mr-2"></i>
+Schedule Another
+</button>
+<button class="flex items-center justify-center glass-effect border border-gray-700 text-light-dimmed py-3 px-4 rounded-button hover:bg-dark-lighter transition-colors">
+<i class="ri-home-line mr-2"></i>
+<a href="homepage.html">Return to Dashboard</a>
+</button>
+</div>
+<div class="glass-effect rounded-lg shadow-lg p-6 mb-8 border border-gray-800">
+<div class="flex items-start">
+<i class="ri-notification-line text-primary mr-4"></i>
+<div>
+<p class="text-light-default font-medium mb-1">Confirmation Sent</p>
+<p class="text-light-dimmed">A confirmation email has been sent to john.smith@company.com</p>
+</div>
+</div>
+</div>
+<div class="glass-effect rounded-lg shadow-lg p-6 border border-gray-800">
+<div class="flex items-start">
+<i class="ri-customer-service-line text-primary mr-4"></i>
+<div>
+<p class="text-light-default font-medium mb-1">Need Help?</p>
+<p class="text-light-dimmed">Contact our support team at <a href="tel:1-800-123-4567" class="text-primary hover:underline">1-800-123-4567</a></p>
+</div>
+</div>
+</div>
+</div>
+<script>
+document.querySelector('[class*="ri-file-copy-line"]').parentElement.addEventListener('click', function() {
+navigator.clipboard.writeText('INS-2025-0305-001');
+const originalIcon = this.innerHTML;
+this.innerHTML = '<i class="ri-check-line text-green-500"></i>';
+setTimeout(() => {
+this.innerHTML = originalIcon;
+}, 2000);
+});
+</script>
+</body>
+</html>

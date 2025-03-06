@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FireGuard Pro - Command Center Access</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet"/>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+</style>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#FF4D4D',
+secondary: '#FF8C00'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+</script>
+</head>
+<body class="min-h-screen bg-[#1A1A1A] text-white">
+<div class="relative min-h-screen flex flex-col">
+<div class="absolute inset-0 bg-[url('https://public.readdy.ai/ai/img_res/daf2350e3d02cf5cd4c75040ad057de3.jpg')] bg-cover bg-center opacity-20"></div>
+<header class="relative z-10 flex items-center justify-between px-8 py-4 bg-black/30 backdrop-blur-sm">
+<div class="flex items-center space-x-4">
+<div class="w-10 h-10 flex items-center justify-center text-primary">
+<i class="ri-fire-fill ri-2x"></i>
+</div>
+<h1 class="text-2xl font-['Pacifico']">FireGuard Pro</h1>
+</div>
+<div class="flex items-center space-x-6">
+<div class="flex items-center space-x-2">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-global-line"></i>
+</div>
+<select class="bg-transparent border-none text-sm cursor-pointer">
+<option value="en">English</option>
+<option value="es">Español</option>
+<option value="fr">Français</option>
+</select>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+<span class="text-sm">Systems Online</span>
+</div>
+</div>
+</header>
+<main class="relative z-10 flex-1 flex items-center justify-center px-4 py-12">
+<div class="w-full max-w-md bg-[#2A2A2A]/90 backdrop-blur-lg rounded-lg shadow-xl p-8">
+<div class="text-center mb-8">
+<h2 class="text-2xl font-bold mb-2">Command Center Access</h2>
+<p class="text-gray-400">Select Your Role to Continue</p>
+</div>
+<div id="roleSelection" class="grid grid-cols-1 gap-4">
+<button type="button" onclick="showLoginForm('user')" class="flex items-center justify-between px-6 py-4 bg-black/30 border border-gray-600 rounded-button hover:border-primary transition-colors duration-200 !rounded-button whitespace-nowrap cursor-pointer group">
+<div class="flex items-center space-x-4">
+<div class="w-12 h-12 flex items-center justify-center bg-primary/10 rounded-full">
+<i class="ri-user-line ri-xl"></i>
+</div>
+<div class="text-left">
+<h3 class="font-medium">Regular User</h3>
+<p class="text-sm text-gray-400">Access basic monitoring features</p>
+</div>
+</div>
+<i class="ri-arrow-right-line opacity-0 group-hover:opacity-100 transition-opacity"></i>
+</button>
+<button type="button" onclick="showLoginForm('admin')" class="flex items-center justify-between px-6 py-4 bg-black/30 border border-gray-600 rounded-button hover:border-primary transition-colors duration-200 !rounded-button whitespace-nowrap cursor-pointer group">
+<div class="flex items-center space-x-4">
+<div class="w-12 h-12 flex items-center justify-center bg-secondary/10 rounded-full">
+<i class="ri-admin-line ri-xl"></i>
+</div>
+<div class="text-left">
+<h3 class="font-medium">Administrator</h3>
+<p class="text-sm text-gray-400">Full system management access</p>
+</div>
+</div>
+<i class="ri-arrow-right-line opacity-0 group-hover:opacity-100 transition-opacity"></i>
+</button>
+<button type="button" onclick="showLoginForm('fire')" class="flex items-center justify-between px-6 py-4 bg-black/30 border border-gray-600 rounded-button hover:border-primary transition-colors duration-200 !rounded-button whitespace-nowrap cursor-pointer group">
+<div class="flex items-center space-x-4">
+<div class="w-12 h-12 flex items-center justify-center bg-red-500/10 rounded-full">
+<i class="ri-fire-line ri-xl"></i>
+</div>
+<div class="text-left">
+<h3 class="font-medium">Fire Department</h3>
+<p class="text-sm text-gray-400">Emergency response portal</p>
+</div>
+</div>
+<i class="ri-arrow-right-line opacity-0 group-hover:opacity-100 transition-opacity"></i>
+</button>
+</div>
+<form id="loginForm" class="space-y-6 hidden">
+<div class="flex items-center mb-6">
+<button type="button" onclick="showRoleSelection()" class="mr-4">
+<i class="ri-arrow-left-line ri-xl"></i>
+</button>
+<div>
+<h3 class="text-xl font-bold" id="loginTitle">User Login</h3>
+<p class="text-sm text-gray-400" id="loginSubtitle">Access your account securely</p>
+</div>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium mb-2">ID Number</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<i class="ri-user-line text-gray-400"></i>
+</div>
+<input type="text" class="w-full bg-black/30 border border-gray-600 rounded-button pl-10 pr-4 py-2 focus:outline-none focus:border-primary" placeholder="Enter your ID">
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium mb-2">Password</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<i class="ri-lock-line text-gray-400"></i>
+</div>
+<input type="password" id="password" class="w-full bg-black/30 border border-gray-600 rounded-button pl-10 pr-10 py-2 focus:outline-none focus:border-primary" placeholder="Enter your password">
+<button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer">
+<i class="ri-eye-line text-gray-400"></i>
+</button>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between text-sm">
+<label class="flex items-center">
+<input type="checkbox" class="w-4 h-4 bg-black/30 border-gray-600 rounded">
+<span class="ml-2">Remember me</span>
+</label>
+<a href="#" class="text-primary hover:text-secondary">Forgot Password?</a>
+</div>
+<button type="submit" class="w-full bg-primary hover:bg-secondary text-white rounded-button py-2 transition-colors duration-200 !rounded-button whitespace-nowrap cursor-pointer flex items-center justify-center space-x-2">
+<i class="ri-shield-check-line"></i>
+<span>Sign In Securely</span>
+</button>
+</form>
+</div>
+</main>
+<script>
+let currentRole = '';
+function showLoginForm(role) {
+    currentRole = role;
+    document.getElementById('roleSelection').classList.add('hidden');
+    const loginForm = document.getElementById('loginForm');
+    loginForm.classList.remove('hidden');
+    
+    const titles = {
+        user: ['User Login', 'Access your account securely'],
+        admin: ['Administrator Login', 'Access system management'],
+        fire: ['Fire Department Login', 'Emergency response access']
+    };
+    
+    document.getElementById('loginTitle').textContent = titles[role][0];
+    document.getElementById('loginSubtitle').textContent = titles[role][1];
+}
+function showRoleSelection() {
+    document.getElementById('roleSelection').classList.remove('hidden');
+    document.getElementById('loginForm').classList.add('hidden');
+    currentRole = '';
+}
+document.getElementById('togglePassword').addEventListener('click', function() {
+    const password = document.getElementById('password');
+    const icon = this.querySelector('i');
+    if (password.type === 'password') {
+        password.type = 'text';
+        icon.className = 'ri-eye-off-line text-gray-400';
+    } else {
+        password.type = 'password';
+        icon.className = 'ri-eye-line text-gray-400';
+    }
+});
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const notification = document.createElement('div');
+    notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-transform duration-300 translate-x-full';
+    notification.textContent = `${currentRole.charAt(0).toUpperCase() + currentRole.slice(1)} login successful! Redirecting...`;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
+});
+</script>
+<footer class="relative z-10 bg-black/30 backdrop-blur-sm py-4">
+<div class="container mx-auto px-8">
+<div class="flex flex-wrap justify-between items-center">
+<div class="flex items-center space-x-4 text-sm">
+<span>v2.5.0</span>
+<span>|</span>
+<span>Last Update: March 4, 2025</span>
+</div>
+<div class="flex items-center space-x-6 text-sm">
+<a href="#" class="hover:text-primary">Terms of Service</a>
+<a href="#" class="hover:text-primary">Privacy Policy</a>
+<a href="#" class="hover:text-primary">Support</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<script>
+document.getElementById('togglePassword').addEventListener('click', function() {
+const password = document.getElementById('password');
+const icon = this.querySelector('i');
+if (password.type === 'password') {
+password.type = 'text';
+icon.className = 'ri-eye-off-line text-gray-400';
+} else {
+password.type = 'password';
+icon.className = 'ri-eye-line text-gray-400';
+}
+});
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+e.preventDefault();
+const formData = new FormData(this);
+const notification = document.createElement('div');
+notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-transform duration-300 translate-x-full';
+notification.textContent = 'Login successful! Redirecting...';
+document.body.appendChild(notification);
+setTimeout(() => {
+notification.style.transform = 'translateX(0)';
+}, 100);
+setTimeout(() => {
+notification.style.transform = 'translateX(100%)';
+setTimeout(() => {
+notification.remove();
+}, 300);
+}, 3000);
+});
+</script>
+</body>
+</html>

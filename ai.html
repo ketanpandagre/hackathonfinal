@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Form with MongoDB</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        input, button { margin: 10px; padding: 10px; width: 300px; }
+    </style>
+</head>
+<body>
+
+    <h2>Enter Your Data</h2>
+    
+    <input type="text" id="content" placeholder="Enter content..." required>
+    <button onclick="sendData()">Submit</button>
+
+    <p id="responseMessage"></p>
+
+    <script>
+        function sendData() {
+            const content = document.getElementById("content").value;
+            if (!content) {
+                alert("Content cannot be empty!");
+                return;
+            }
+
+            fetch("http://127.0.0.1:5004/api/generate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ content }) // Send JSON with "content" field
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("responseMessage").innerText = data.message;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Error sending data.");
+            });
+        }
+    </script>
+
+</body>
+</html>

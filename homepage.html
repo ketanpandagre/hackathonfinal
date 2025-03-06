@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FireGuard - Smart Fire Safety Management</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#FF4B2B',
+secondary: '#2B4BFF',
+dark: {
+DEFAULT: '#111827',
+lighter: '#1F2937',
+lightest: '#374151'
+}
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+.notification-dropdown, .profile-dropdown {
+display: none;
+}
+.notification-btn:hover .notification-dropdown,
+.profile-btn:hover .profile-dropdown {
+display: block;
+}
+</style>
+</head>
+<body class="bg-dark min-h-screen text-gray-200">
+<header class="fixed w-full top-0 bg-dark-lighter shadow-sm z-50">
+<div class="max-w-7xl mx-auto px-4">
+<div class="flex items-center justify-between h-16">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 flex items-center justify-center text-primary">
+<i class=" rri-fire-linei-2x"></i>
+</div>
+<span class="font-['Pacifico'] text-2xl text-primary">FireGuard</span>
+</div>
+<nav class="hidden md:flex space-x-8">
+<a href="#" class="text-gray-300 hover:text-primary px-3 py-2 text-sm font-medium cursor-pointer">Dashboard</a>
+<a href="#" class="text-gray-300 hover:text-primary px-3 py-2 text-sm font-medium cursor-pointer">Applications</a>
+<a href="#" class="text-gray-300 hover:text-primary px-3 py-2 text-sm font-medium cursor-pointer">Inspections</a>
+<a href="#" class="text-gray-300 hover:text-primary px-3 py-2 text-sm font-medium cursor-pointer">NOC Issuance</a>
+<a href="#" class="text-gray-300 hover:text-primary px-3 py-2 text-sm font-medium cursor-pointer">Reports</a>
+<a href="#" class="text-gray-300 hover:text-primary px-3 py-2 text-sm font-medium cursor-pointer">Support</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="notification-btn relative">
+<button class="w-8 h-8 flex items-center justify-center text-gray-300 hover:text-primary cursor-pointer">
+<i class="ri-notification-3-line ri-lg"></i>
+<span class="absolute top-0 right-0 h-4 w-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">3</span>
+</button>
+<div class="notification-dropdown absolute right-0 mt-2 w-80 bg-dark-lighter rounded shadow-lg p-4">
+<div class="space-y-4">
+<div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer">
+<div class="w-8 h-8 flex items-center justify-center bg-blue-100 rounded-full text-blue-600">
+<i class="ri-file-list-line"></i>
+</div>
+<div>
+<p class="text-sm font-medium">New NOC Application</p>
+<p class="text-xs text-gray-500">2 minutes ago</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer">
+<div class="w-8 h-8 flex items-center justify-center bg-yellow-100 rounded-full text-yellow-600">
+<i class="ri-calendar-line"></i>
+</div>
+<div>
+<p class="text-sm font-medium">Inspection Scheduled</p>
+<p class="text-xs text-gray-500">1 hour ago</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer">
+<div class="w-8 h-8 flex items-center justify-center bg-red-100 rounded-full text-red-600">
+<i class="ri-alert-line"></i>
+</div>
+<div>
+<p class="text-sm font-medium">Fire Safety Alert</p>
+<p class="text-xs text-gray-500">2 hours ago</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="profile-btn relative" id="profileBtn">
+<button class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer" onclick="toggleLoginModal()">
+<i class="ri-user-line text-gray-600"></i>
+</button>
+<div class="profile-dropdown absolute right-0 mt-2 w-48 bg-white rounded shadow-lg" id="profileDropdown" style="display: none;">
+<div class="p-4 border-b">
+<p class="font-medium" id="userName">Not logged in</p>
+<p class="text-sm text-gray-500" id="userRole"></p>
+</div>
+<div class="py-1" id="loggedInMenu" style="display: none;">
+<a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">Profile Settings</a>
+<a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">Notifications</a>
+<a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 cursor-pointer" onclick="logout()">Sign out</a>
+</div>
+<div class="py-1" id="loggedOutMenu">
+<a href="#" class="block px-4 py-2 text-sm text-primary hover:bg-gray-100 cursor-pointer" onclick="toggleLoginModal()">Login</a>
+</div>
+</div>
+</div>
+<div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+<div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-xl font-bold"><a href="index.html">Login</a></h3>
+<button onclick="toggleLoginModal()" class="text-gray-500 hover:text-gray-700">
+<i class="ri-close-line ri-lg"></i>
+</button>
+</div>
+<form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+<input type="email" id="email" required class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Enter your email">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+<input type="password" id="password" required class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Enter your password">
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<input type="checkbox" id="remember" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+<label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
+</div>
+<a href="#" class="text-sm text-primary hover:text-opacity-80">Forgot password?</a>
+</div>
+<button type="submit" class="w-full bg-primary text-white py-2 px-4 rounded-button hover:bg-opacity-90 transition">Login</button>
+</form>
+</div>
+</div>
+<script>
+let isLoggedIn = false;
+const mockUser = {
+email: 'john@example.com',
+password: 'password123',
+name: 'John Anderson',
+role: 'Fire Safety Inspector'
+};
+function toggleLoginModal() {
+const modal = document.getElementById('loginModal');
+const dropdown = document.getElementById('profileDropdown');
+modal.classList.toggle('hidden');
+dropdown.style.display = 'none';
+}
+function handleLogin(event) {
+event.preventDefault();
+const email = document.getElementById('email').value;
+const password = document.getElementById('password').value;
+if (email === mockUser.email && password === mockUser.password) {
+isLoggedIn = true;
+document.getElementById('userName').textContent = mockUser.name;
+document.getElementById('userRole').textContent = mockUser.role;
+document.getElementById('loggedInMenu').style.display = 'block';
+document.getElementById('loggedOutMenu').style.display = 'none';
+toggleLoginModal();
+const successNotification = document.createElement('div');
+successNotification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50';
+successNotification.textContent = 'Login successful!';
+document.body.appendChild(successNotification);
+setTimeout(() => successNotification.remove(), 3000);
+} else {
+const errorNotification = document.createElement('div');
+errorNotification.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded shadow-lg z-50';
+errorNotification.textContent = 'Invalid email or password!';
+document.body.appendChild(errorNotification);
+setTimeout(() => errorNotification.remove(), 3000);
+}
+}
+function logout() {
+isLoggedIn = false;
+document.getElementById('userName').textContent = 'Not logged in';
+document.getElementById('userRole').textContent = '';
+document.getElementById('loggedInMenu').style.display = 'none';
+document.getElementById('loggedOutMenu').style.display = 'block';
+document.getElementById('profileDropdown').style.display = 'none';
+const notification = document.createElement('div');
+notification.className = 'fixed top-4 right-4 bg-blue-500 text-white px-6 py-3 rounded shadow-lg z-50';
+notification.textContent = 'Logged out successfully!';
+document.body.appendChild(notification);
+setTimeout(() => notification.remove(), 3000);
+}
+document.addEventListener('click', function(event) {
+const profileBtn = document.getElementById('profileBtn');
+const profileDropdown = document.getElementById('profileDropdown');
+const loginModal = document.getElementById('loginModal');
+if (!profileBtn.contains(event.target) && !profileDropdown.contains(event.target) && !loginModal.contains(event.target)) {
+profileDropdown.style.display = 'none';
+}
+});
+document.querySelector('.profile-btn').addEventListener('mouseenter', function() {
+document.getElementById('profileDropdown').style.display = 'block';
+});
+</script>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-16">
+<section class="relative bg-gradient-to-r from-gray-900 to-gray-800 overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url('https://public.readdy.ai/ai/img_res/5143c04b6a0236a64d7102b6bb20421e.jpg')"></div>
+<div class="max-w-7xl mx-auto px-4 py-24 relative">
+<div class="grid md:grid-cols-2 gap-12 items-center">
+<div>
+<h1 class="text-5xl font-bold text-white mb-6">Ensuring Fire Safety, One Click at a Time</h1>
+<p class="text-lg text-gray-300 mb-8">Advanced AI-powered fire safety management system for modern buildings. Streamline inspections, automate compliance, and protect lives.</p>
+<div class="flex gap-4">
+<button class="bg-primary text-white px-6 py-3 rounded-button font-medium hover:bg-opacity-90 transition cursor-pointer whitespace-nowrap" >
+<a href="noc.html" target="_blank">Apply for NOC</a>
+</button>
+<button class="bg-white text-primary px-6 py-3 rounded-button font-medium hover:bg-opacity-90 transition cursor-pointer whitespace-nowrap">
+    <a href="inspection.html" target="_blank">Schedule Inspection</a>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-6">
+<div class="bg-white bg-opacity-10 p-6 rounded backdrop-blur-sm">
+<div class="text-3xl font-bold text-white mb-2" id="nocCounter">0</div>
+<div class="text-gray-300">Total NOCs Issued</div>
+</div>
+<div class="bg-white bg-opacity-10 p-6 rounded backdrop-blur-sm">
+<div class="text-3xl font-bold text-white mb-2" id="inspectionCounter">0</div>
+<div class="text-gray-300">Pending Inspections</div>
+</div>
+<div class="bg-white bg-opacity-10 p-6 rounded backdrop-blur-sm">
+<div class="text-3xl font-bold text-white mb-2" id="violationCounter">0</div>
+<div class="text-gray-300">Safety Violations Detected</div>
+</div>
+<div class="bg-white bg-opacity-10 p-6 rounded backdrop-blur-sm">
+<div class="text-3xl font-bold text-white mb-2" id="timeCounter">0</div>
+<div class="text-gray-300">Avg. Approval Time (hrs)</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-16 bg-dark-lighter">
+<div class="max-w-7xl mx-auto px-4">
+<div class="mb-12">
+<h2 class="text-3xl font-bold text-gray-100 mb-4">Live Fire Safety Compliance Map</h2>
+<p class="text-gray-400">Real-time monitoring of building safety status across the city</p>
+</div>
+<div class="bg-white rounded-lg shadow-sm p-6 h-[500px] relative overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://public.readdy.ai/gen_page/map_placeholder_1280x720.png')"></div>
+<div class="absolute inset-0 bg-white bg-opacity-10"></div>
+<div class="relative">
+<div class="flex items-center gap-6 mb-6">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-green-500"></div>
+<span class="text-sm text-gray-600">Compliant Buildings</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+<span class="text-sm text-gray-600">Pending Inspections</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-red-500"></div>
+<span class="text-sm text-gray-600">Fire Hazard Alerts</span>
+</div>
+</div>
+<div id="map" class="h-[400px] relative">
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+<div class="w-8 h-8 bg-red-500 rounded-full animate-ping"></div>
+<div class="w-4 h-4 bg-yellow-500 rounded-full absolute -top-12 -left-24 animate-ping" style="animation-delay: 1s"></div>
+<div class="w-4 h-4 bg-green-500 rounded-full absolute top-8 -right-16 animate-ping" style="animation-delay: 0.5s"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-16">
+<div class="max-w-7xl mx-auto px-4">
+<div class="mb-12">
+<h2 class="text-3xl font-bold text-gray-100 mb-4">Quick Actions</h2>
+<p class="text-gray-400">Manage your fire safety tasks efficiently</p>
+</div>
+<div class="grid md:grid-cols-3 gap-6">
+<div class="bg-dark-lightest rounded-lg shadow-sm p-6 border border-gray-800">
+<div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+<i class="ri-file-list-line text-blue-600 ri-xl"></i>
+</div>
+<h3 class="text-xl font-semibold mb-2">Pending Applications</h3>
+<p class="text-gray-600 mb-4">Review and process new NOC applications</p>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 bg-dark rounded">
+<div>
+<p class="font-medium">Grand Plaza Mall</p>
+<p class="text-sm text-gray-500">Submitted: March 1, 2025</p>
+</div>
+<button class="text-primary hover:text-opacity-80 cursor-pointer">Review</button>
+</div>
+<div class="flex items-center justify-between p-3 bg-dark rounded">
+<div>
+<p class="font-medium">Skyline Apartments</p>
+<p class="text-sm text-gray-500">Submitted: March 2, 2025</p>
+</div>
+<button class="text-primary hover:text-opacity-80 cursor-pointer">Review</button>
+</div>
+</div>
+</div>
+<div class="bg-dark-lightest rounded-lg shadow-sm p-6 border border-gray-800">
+<div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+<i class="ri-calendar-line text-green-600 ri-xl"></i>
+</div>
+<h3 class="text-xl font-semibold mb-2">Upcoming Inspections</h3>
+<p class="text-gray-600 mb-4">View and manage scheduled inspections</p>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 bg-dark rounded">
+<div>
+<p class="font-medium">Tech Park Building B</p>
+<p class="text-sm text-gray-500">March 5, 2025 - 10:00 AM</p>
+</div>
+<button class="text-primary hover:text-opacity-80 cursor-pointer">Details</button>
+</div>
+<div class="flex items-center justify-between p-3 bg-dark rounded">
+<div>
+<p class="font-medium">Central Hospital</p>
+<p class="text-sm text-gray-500">March 6, 2025 - 2:00 PM</p>
+</div>
+<button class="text-primary hover:text-opacity-80 cursor-pointer">Details</button>
+</div>
+</div>
+</div>
+<div class="bg-dark-lightest rounded-lg shadow-sm p-6 border border-gray-800">
+<div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+<i class="ri-alert-line text-yellow-600 ri-xl"></i>
+</div>
+<h3 class="text-xl font-semibold mb-2">Safety Alerts</h3>
+<p class="text-gray-600 mb-4">Critical notifications requiring attention</p>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 bg-red-50 rounded">
+<div>
+<p class="font-medium text-red-700">Emergency Exit Blocked</p>
+<p class="text-sm text-red-600">Sunrise Office Tower</p>
+</div>
+<button class="text-red-600 hover:text-opacity-80 cursor-pointer">Urgent</button>
+</div>
+<div class="flex items-center justify-between p-3 bg-yellow-50 rounded">
+<div>
+<p class="font-medium text-yellow-700">Fire Alarm Maintenance</p>
+<p class="text-sm text-yellow-600">Metro Station</p>
+</div>
+<button class="text-yellow-600 hover:text-opacity-80 cursor-pointer">Review</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-16 bg-dark-lighter">
+<div class="max-w-7xl mx-auto px-4">
+<div class="mb-12">
+<h2 class="text-3xl font-bold text-gray-100 mb-4">Analytics & Reports</h2>
+<p class="text-gray-400">Track and analyze fire safety metrics</p>
+</div>
+<div class="grid md:grid-cols-2 gap-6">
+<div class="bg-dark-lightest rounded-lg shadow-sm p-6 border border-gray-800">
+<h3 class="text-xl font-semibold mb-6">Monthly Inspections</h3>
+<div id="inspectionChart" class="h-[300px]"></div>
+</div>
+<div class="bg-dark-lightest rounded-lg shadow-sm p-6 border border-gray-800">
+<h3 class="text-xl font-semibold mb-6">Compliance Rate</h3>
+<div id="complianceChart" class="h-[300px]"></div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-gray-900 text-white py-12">
+<div class="max-w-7xl mx-auto px-4">
+<div class="grid md:grid-cols-4 gap-8">
+<div>
+<div class="flex items-center gap-2 mb-6">
+<div class="w-8 h-8 flex items-center justify-center text-primary">
+<i class="ri-fire-line ri-2x"></i>
+</div>
+<span class="font-['Pacifico'] text-2xl text-primary">FireShieldAI</span>
+</div>
+<p class="text-gray-400">Advanced fire safety management system powered by artificial intelligence.</p>
+</div>
+<div>
+<h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+<ul class="space-y-2">
+<li><a href="#" class="text-gray-400 hover:text-white cursor-pointer">About Us</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white cursor-pointer">Safety Guidelines</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white cursor-pointer">Regulations</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white cursor-pointer">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-lg font-semibold mb-4">Support</h4>
+<ul class="space-y-2">
+<li><a href="#" class="text-gray-400 hover:text-white cursor-pointer">Help Center</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white cursor-pointer">FAQs</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white cursor-pointer">Terms of Service</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white cursor-pointer">Privacy Policy</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-lg font-semibold mb-4">Emergency Contact</h4>
+<p class="text-gray-400 mb-2">24/7 Fire Safety Helpline</p>
+<p class="text-2xl font-bold text-primary mb-4">1-800-FIRE-911</p>
+<div class="flex space-x-4">
+<a href="#" class="text-gray-400 hover:text-white cursor-pointer">
+<i class="ri-facebook-fill ri-lg"></i>
+</a>
+<a href="#" class="text-gray-400 hover:text-white cursor-pointer">
+<i class="ri-twitter-fill ri-lg"></i>
+</a>
+<a href="#" class="text-gray-400 hover:text-white cursor-pointer">
+<i class="ri-linkedin-fill ri-lg"></i>
+</a>
+</div>
+</div>
+</div>
+<div class="border-t border-gray-800 mt-12 pt-8 text-center">
+<p class="text-gray-400">&copy; 2025 FireShieldAI. All rights reserved.</p>
+</div>
+</div>
+</footer>
+<button id="emergencyButton" class="fixed bottom-6 right-6 bg-red-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-red-700 transition flex items-center gap-2 cursor-pointer">
+<i class="ri-alarm-warning-line"></i>
+<span><a href="sendliveloc.html" target="_blank">Report Emergency</a></span>
+</button>
+<script>
+function animateValue(obj, start, end, duration) {
+let startTimestamp = null;
+const step = (timestamp) => {
+if (!startTimestamp) startTimestamp = timestamp;
+const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+obj.innerHTML = Math.floor(progress * (end - start) + start);
+if (progress < 1) {
+window.requestAnimationFrame(step);
+}
+};
+window.requestAnimationFrame(step);
+}
+const nocCounter = document.getElementById("nocCounter");
+const inspectionCounter = document.getElementById("inspectionCounter");
+const violationCounter = document.getElementById("violationCounter");
+const timeCounter = document.getElementById("timeCounter");
+animateValue(nocCounter, 0, 1234, 2000);
+animateValue(inspectionCounter, 0, 89, 2000);
+animateValue(violationCounter, 0, 45, 2000);
+animateValue(timeCounter, 0, 24, 2000);
+const inspectionChart = echarts.init(document.getElementById('inspectionChart'));
+const complianceChart = echarts.init(document.getElementById('complianceChart'));
+const inspectionOption = {
+animation: false,
+tooltip: {
+trigger: 'axis',
+backgroundColor: 'rgba(31, 41, 55, 0.9)',
+borderColor: '#374151',
+borderWidth: 1,
+textStyle: {
+color: '#e5e7eb'
+}
+},
+xAxis: {
+type: 'category',
+data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+axisLine: {
+lineStyle: {
+color: '#374151'
+}
+}
+},
+yAxis: {
+type: 'value',
+axisLine: {
+lineStyle: {
+color: '#374151'
+}
+}
+},
+series: [{
+data: [150, 230, 224, 218, 135, 147],
+type: 'line',
+smooth: true,
+symbol: 'none',
+lineStyle: {
+color: 'rgba(87, 181, 231, 1)'
+},
+areaStyle: {
+color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+offset: 0,
+color: 'rgba(87, 181, 231, 0.3)'
+}, {
+offset: 1,
+color: 'rgba(87, 181, 231, 0.1)'
+}])
+}
+}]
+};
+const complianceOption = {
+animation: false,
+tooltip: {
+trigger: 'item',
+backgroundColor: 'rgba(255, 255, 255, 0.9)',
+borderColor: '#eee',
+borderWidth: 1,
+textStyle: {
+color: '#1f2937'
+}
+},
+series: [{
+type: 'pie',
+radius: ['60%', '80%'],
+data: [{
+value: 85,
+name: 'Compliant',
+itemStyle: {
+color: 'rgba(87, 181, 231, 1)'
+}
+}, {
+value: 15,
+name: 'Non-compliant',
+itemStyle: {
+color: 'rgba(252, 141, 98, 1)'
+}
+}],
+label: {
+show: false
+}
+}]
+};
+inspectionChart.setOption(inspectionOption);
+complianceChart.setOption(complianceOption);
+window.addEventListener('resize', function() {
+inspectionChart.resize();
+complianceChart.resize();
+});
+</script>
+</body>
+</html>

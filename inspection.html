@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FireGuard Pro - Inspection Scheduling</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#FF4D4D',
+secondary: '#FF8C00',
+dark: '#1A1A1A',
+darkGray: '#2A2A2A',
+lightGray: '#E0E0E0'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+</script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body { background-color: #1A1A1A; color: #E0E0E0; }
+.custom-scrollbar::-webkit-scrollbar {
+width: 6px;
+height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+background: #2A2A2A;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+background: #FF4D4D;
+border-radius: 3px;
+}
+.date-picker-cell {
+transition: all 0.3s;
+}
+.date-picker-cell:not(.disabled):hover {
+background: rgba(255, 77, 77, 0.2);
+}
+.notification {
+transform: translateX(150%);
+animation: slideIn 0.5s forwards;
+}
+@keyframes slideIn {
+to { transform: translateX(0); }
+}
+</style>
+</head>
+<body class="min-h-screen">
+<nav class="bg-darkGray border-b border-gray-700">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-16">
+<div class="flex items-center">
+<div class="flex-shrink-0 font-['Pacifico'] text-primary text-2xl">
+FireGuard
+</div>
+<div class="hidden md:block ml-10">
+<div class="flex items-baseline space-x-4">
+<a href="#" class="text-white px-3 py-2 rounded-button text-sm font-medium">Dashboard</a>
+<a href="#" class="text-lightGray hover:text-white px-3 py-2 rounded-button text-sm font-medium">Inspections</a>
+<a href="#" class="text-lightGray hover:text-white px-3 py-2 rounded-button text-sm font-medium">Reports</a>
+<a href="#" class="text-lightGray hover:text-white px-3 py-2 rounded-button text-sm font-medium">Settings</a>
+</div>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<div class="relative">
+<button id="notificationBtn" class="text-lightGray hover:text-white p-2 rounded-full">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-notification-3-line"></i>
+</div>
+</button>
+<div class="absolute top-0 right-0 w-2 h-2 bg-primary rounded-full"></div>
+</div>
+<div class="relative">
+<button id="userMenuBtn" class="flex items-center text-sm text-lightGray hover:text-white">
+<span class="h-8 w-8 rounded-full bg-gray-700 flex items-center justify-center">
+<i class="ri-user-line"></i>
+</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="mb-8">
+<h1 class="text-3xl font-bold text-white">Schedule Your Fire Safety Inspection</h1>
+<p class="mt-2 text-lightGray">Complete the form below to request a fire safety inspection for your property</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2">
+<div class="bg-darkGray rounded-lg p-6 mb-6">
+<h2 class="text-xl font-semibold text-white mb-4">Property Details</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium text-lightGray mb-1">Property Name</label>
+<input type="text" class="w-full bg-dark border border-gray-700 rounded-button px-4 py-2 text-white focus:outline-none focus:border-primary">
+</div>
+<div>
+<label class="block text-sm font-medium text-lightGray mb-1">Building Type</label>
+<div class="relative">
+<button id="buildingTypeBtn" class="w-full bg-dark border border-gray-700 rounded-button px-4 py-2 text-white flex items-center justify-between">
+<span>Select Building Type</span>
+<i class="ri-arrow-down-s-line"></i>
+</button>
+</div>
+</div>
+<div class="md:col-span-2">
+<label class="block text-sm font-medium text-lightGray mb-1">Address</label>
+<input type="text" class="w-full bg-dark border border-gray-700 rounded-button px-4 py-2 text-white focus:outline-none focus:border-primary">
+</div>
+</div>
+</div>
+<div class="bg-darkGray rounded-lg p-6 mb-6">
+<h2 class="text-xl font-semibold text-white mb-4">Required Documents</h2>
+<div class="border-2 border-dashed border-gray-700 rounded-lg p-6 text-center">
+<div class="w-12 h-12 mx-auto mb-4 flex items-center justify-center">
+<i class="ri-upload-cloud-line text-3xl text-lightGray"></i>
+</div>
+<p class="text-lightGray mb-2">Drag and drop your files here, or click to select files</p>
+<p class="text-sm text-gray-500">PDF, JPG, PNG (Max. 10MB each)</p>
+<input type="file" class="hidden" multiple accept=".pdf,.jpg,.jpeg,.png">
+<button class="mt-4 px-4 py-2 bg-primary text-white rounded-button hover:bg-opacity-90 !rounded-button whitespace-nowrap cursor-pointer">Select Files</button>
+</div>
+</div>
+<div class="bg-darkGray rounded-lg p-6">
+<h2 class="text-xl font-semibold text-white mb-4">Special Instructions</h2>
+<textarea class="w-full bg-dark border border-gray-700 rounded-button px-4 py-2 text-white focus:outline-none focus:border-primary h-32"></textarea>
+</div>
+</div>
+<div class="lg:col-span-1">
+<div class="bg-darkGray rounded-lg p-6 mb-6">
+<h2 class="text-xl font-semibold text-white mb-4">Select Date & Time</h2>
+<div id="calendar" class="mb-4"></div>
+<div id="timeSlots" class="grid grid-cols-2 gap-2 mb-4">
+</div>
+<div id="selectedDateTime" class="hidden border-t border-gray-700 pt-4 mt-4">
+<h3 class="text-lg font-medium text-white mb-2">Selected Schedule</h3>
+<div class="bg-dark rounded-lg p-4">
+<div class="flex items-center mb-2">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-calendar-line text-primary"></i>
+</div>
+<span class="ml-2 text-white" id="selectedDate">Not selected</span>
+</div>
+<div class="flex items-center">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-time-line text-primary"></i>
+</div>
+<span class="ml-2 text-white" id="selectedTime">Not selected</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-darkGray rounded-lg p-6">
+<h2 class="text-xl font-semibold text-white mb-4">Inspection Status</h2>
+<div class="space-y-4">
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+<i class="ri-check-line text-white"></i>
+</div>
+<div class="ml-3">
+<p class="text-white font-medium">Request Submitted</p>
+<p class="text-sm text-lightGray">March 4, 2025</p>
+</div>
+</div>
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center">
+<i class="ri-user-line text-lightGray"></i>
+</div>
+<div class="ml-3">
+<p class="text-lightGray font-medium">Inspector Assignment</p>
+<p class="text-sm text-gray-500">Pending</p>
+</div>
+</div>
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center">
+<i class="ri-calendar-check-line text-lightGray"></i>
+</div>
+<div class="ml-3">
+<p class="text-lightGray font-medium">Inspection Complete</p>
+<p class="text-sm text-gray-500">Pending</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="fixed bottom-8 right-8 flex space-x-4">
+<button class="px-6 py-3 bg-gray-700 text-white rounded-button hover:bg-opacity-90 !rounded-button whitespace-nowrap cursor-pointer">Save Draft</button>
+<button class="px-6 py-3 bg-primary text-white rounded-button hover:bg-opacity-90 !rounded-button whitespace-nowrap cursor-pointer"><a href="inspectionsuccess.html">Submit Request</a></button>
+</div>
+</main>
+<div id="notification" class="fixed top-4 right-4 notification hidden">
+<div class="bg-darkGray border border-gray-700 rounded-lg shadow-lg p-4">
+<div class="flex items-start">
+<div class="flex-shrink-0">
+<i class="ri-checkbox-circle-line text-primary text-xl"></i>
+</div>
+<div class="ml-3">
+<p class="text-sm font-medium text-white" id="notificationMessage"></p>
+</div>
+<button class="ml-4" onclick="hideNotification()">
+<i class="ri-close-line text-lightGray hover:text-white"></i>
+</button>
+</div>
+</div>
+</div>
+<script>
+const mockData = {
+buildingTypes: ['Commercial', 'Residential', 'Industrial', 'Educational', 'Healthcare'],
+timeSlots: ['09:00 AM', '10:30 AM', '02:00 PM', '03:30 PM'],
+notifications: []
+};
+function showNotification(message) {
+const notification = document.getElementById('notification');
+document.getElementById('notificationMessage').textContent = message;
+notification.classList.remove('hidden');
+setTimeout(() => {
+notification.classList.add('hidden');
+}, 3000);
+}
+function hideNotification() {
+document.getElementById('notification').classList.add('hidden');
+}
+document.getElementById('buildingTypeBtn').addEventListener('click', function() {
+const dropdown = document.createElement('div');
+dropdown.className = 'absolute top-full left-0 w-full mt-1 bg-dark border border-gray-700 rounded-lg shadow-lg z-50';
+dropdown.innerHTML = mockData.buildingTypes.map(type => `
+<button class="w-full text-left px-4 py-2 hover:bg-darkGray text-white text-sm cursor-pointer">
+${type}
+</button>
+`).join('');
+this.parentElement.appendChild(dropdown);
+const closeDropdown = () => {
+dropdown.remove();
+document.removeEventListener('click', closeDropdown);
+};
+setTimeout(() => {
+document.addEventListener('click', closeDropdown);
+}, 0);
+});
+let selectedDate = null;
+let selectedTime = null;
+function renderCalendar() {
+const calendar = document.getElementById('calendar');
+const today = new Date();
+const month = today.getMonth();
+const year = today.getFullYear();
+const firstDay = new Date(year, month, 1);
+const lastDay = new Date(year, month + 1, 0);
+const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+let calendarHTML = `
+<div class="grid grid-cols-7 gap-1 mb-2">
+${days.map(day => `
+<div class="text-center text-sm text-gray-500">${day}</div>
+`).join('')}
+</div>
+<div class="grid grid-cols-7 gap-1">
+`;
+for (let i = 0; i < firstDay.getDay(); i++) {
+calendarHTML += `<div class="h-10"></div>`;
+}
+for (let day = 1; day <= lastDay.getDate(); day++) {
+const date = new Date(year, month, day);
+const isToday = date.toDateString() === today.toDateString();
+const isPast = date < today;
+const isSelected = selectedDate?.toDateString() === date.toDateString();
+calendarHTML += `
+<div class="date-picker-cell h-10 flex items-center justify-center rounded-button 
+${isPast ? 'text-gray-600' : ''} 
+${isToday ? 'bg-primary text-white' : ''} 
+${isSelected ? 'bg-primary bg-opacity-50 text-white' : ''} 
+${!isPast ? 'cursor-pointer' : ''}"
+${!isPast ? `onclick="selectDate(new Date(${year}, ${month}, ${day}))"` : ''}>
+${day}
+</div>
+`;
+}
+calendarHTML += `</div>`;
+calendar.innerHTML = calendarHTML;
+renderTimeSlots();
+updateSelectedDateTime();
+}
+function selectDate(date) {
+selectedDate = date;
+selectedTime = null;
+renderCalendar();
+}
+function renderTimeSlots() {
+const timeSlotsContainer = document.getElementById('timeSlots');
+timeSlotsContainer.innerHTML = mockData.timeSlots.map(slot => `
+<button class="p-2 text-sm text-white bg-dark border border-gray-700 rounded-button hover:border-primary cursor-pointer
+${selectedTime === slot ? 'bg-primary border-primary' : ''}"
+onclick="selectTime('${slot}')">
+${slot}
+</button>
+`).join('');
+}
+function selectTime(time) {
+selectedTime = time;
+renderTimeSlots();
+updateSelectedDateTime();
+}
+function updateSelectedDateTime() {
+const selectedDateTimeDiv = document.getElementById('selectedDateTime');
+const selectedDateSpan = document.getElementById('selectedDate');
+const selectedTimeSpan = document.getElementById('selectedTime');
+if (selectedDate || selectedTime) {
+selectedDateTimeDiv.classList.remove('hidden');
+selectedDateSpan.textContent = selectedDate ? selectedDate.toLocaleDateString('en-US', { 
+weekday: 'long', 
+year: 'numeric', 
+month: 'long', 
+day: 'numeric' 
+}) : 'Not selected';
+selectedTimeSpan.textContent = selectedTime || 'Not selected';
+} else {
+selectedDateTimeDiv.classList.add('hidden');
+}
+}
+renderCalendar();
+document.querySelectorAll('button').forEach(button => {
+if (!button.classList.contains('!rounded-button')) {
+button.classList.add('!rounded-button');
+}
+});
+</script>
+</body>
+</html>

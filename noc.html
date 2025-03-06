@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apply for Fire Safety NOC</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+<script>
+tailwind.config = {
+darkMode: 'class',
+theme: {
+extend: {
+colors: {
+primary: '#FF4D4D',
+secondary: '#FF8C00',
+dark: {
+DEFAULT: '#1A1A1A',
+lighter: '#2A2A2A90',
+input: '#374151',
+border: '#4B5563'
+}
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("✅ JavaScript is working!");
+    console.log(document.getElementById("nocForm"));
+document.getElementById("nocForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const formData = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                phone: document.getElementById("tel").value,
+                txt: document.getElementById("txt").value,
+                add: document.getElementById("add").value,
+                flrarea: document.getElementById("flrarea").value,
+                idate: document.getElementById("idate").value
+            };
+            console.log(formData);
+            const response = await fetch("http://localhost:5002/submit-form", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            }).catch((e, err) => {console.log(e, err)});
+            const data = await response.json();
+            alert(data.message);
+        });
+});
+</script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+.step-active { color: #1a56db; }
+.step-completed { color: #10b981; }
+.step-pending { color: #9ca3af; }
+.form-section:not(.active) { display: none; }
+.custom-file-input::-webkit-file-upload-button {
+visibility: hidden;
+display: none;
+}
+</style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen text-gray-900 dark:text-gray-100">
+<nav class="bg-white dark:bg-gray-800 shadow-sm">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between h-16">
+<div class="flex items-center space-x-2">
+<i class="ri-fire-fill text-primary text-2xl"></i>
+<span class="text-2xl font-['Pacifico'] text-gray-900 dark:text-white">FireGuard</span>
+<span class="text-sm text-gray-600 dark:text-gray-400 ml-4">Monitoring & Automation System</span>
+</div>
+<div class="flex items-center space-x-6">
+<div class="flex items-center text-green-600">
+<i class="ri-checkbox-circle-line mr-2"></i>
+<span>Systems Online</span>
+</div>
+<div class="flex items-center text-gray-600 hover:text-gray-900 cursor-pointer">
+<i class="ri-global-line mr-2"></i>
+<span>EN</span>
+</div>
+<button class="text-gray-600 hover:text-gray-900 cursor-pointer">Help</button>
+<button class="text-gray-600 hover:text-gray-900 cursor-pointer">Contact</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="mb-8">
+<h1 class="text-3xl font-bold text-gray-900">Apply for Fire Safety NOC</h1>
+<p class="mt-2 text-gray-600">Complete the form below to apply for your Fire Safety No Objection Certificate</p>
+</div>
+<div class="flex mb-8 justify-between items-center">
+<div class="flex space-x-8">
+<div class="step step-active">
+<div class="flex items-center">
+<span class="w-8 h-8 flex items-center justify-center rounded-full border-2 border-primary bg-primary text-white">1</span>
+<span class="ml-2">Applicant Details</span>
+</div>
+</div>
+<div class="step step-pending">
+<div class="flex items-center">
+<span class="w-8 h-8 flex items-center justify-center rounded-full border-2 border-gray-300">2</span>
+<span class="ml-2">Building Info</span>
+</div>
+</div>
+<div class="step step-pending">
+<div class="flex items-center">
+<span class="w-8 h-8 flex items-center justify-center rounded-full border-2 border-gray-300">3</span>
+<span class="ml-2">Safety Measures</span>
+</div>
+</div>
+<div class="step step-pending">
+<div class="flex items-center">
+<span class="w-8 h-8 flex items-center justify-center rounded-full border-2 border-gray-300">4</span>
+<span class="ml-2">Documents</span>
+</div>
+</div>
+</div>
+</div>
+<form id="nocForm" class="bg-white dark:bg-gray-800 shadow-xl rounded-lg p-8 border border-gray-100 dark:border-gray-700">
+<div id="userForm" class="form-section active" data-step="1">
+<h2 class="text-xl font-semibold mb-6">Applicant Details</h2>
+<div class="grid grid-cols-2 gap-6">
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name *</label>
+<input type="text" id="name" name="name" class="w-full px-4 py-2 bg-white dark:bg-dark-input border-gray-300 dark:border-dark-border border rounded-button focus:ring-2 focus:ring-primary focus:border-primary text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500" placeholder="Enter your full name">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address *</label>
+<input type="email" id="email" name="email" class="w-full px-4 py-2 bg-white dark:bg-dark-input border-gray-300 dark:border-dark-border border rounded-button focus:ring-2 focus:ring-primary focus:border-primary text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500" placeholder="Enter your email">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone Number *</label>
+<input type="tel" id="tel" name="tel" class="w-full px-4 py-2 bg-white dark:bg-dark-input border-gray-300 dark:border-dark-border border rounded-button focus:ring-2 focus:ring-primary focus:border-primary text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500" placeholder="Enter your phone number">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Organization Name *</label>
+<input type="text" id="txt" name="txt" class="w-full px-4 py-2 bg-white dark:bg-dark-input border-gray-300 dark:border-dark-border border rounded-button focus:ring-2 focus:ring-primary focus:border-primary text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500" placeholder="Enter organization name">
+</div>
+</div>
+</div>
+<div class="form-section" data-step="2">
+<h2 class="text-xl font-semibold mb-6">Building Information</h2>
+<div class="grid grid-cols-2 gap-6">
+<div class="col-span-2">
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Building Address *</label>
+<textarea id="add" required class="w-full px-4 py-2 bg-white dark:bg-dark-input border-gray-300 dark:border-dark-border border rounded-button focus:ring-2 focus:ring-primary focus:border-primary text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500" rows="3" placeholder="Enter complete building address"></textarea>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Building Type *</label>
+<div class="relative">
+<select required class="w-full px-4 py-2 bg-white dark:bg-dark-input border-gray-300 dark:border-dark-border border rounded-button focus:ring-2 focus:ring-primary focus:border-primary text-gray-900 dark:text-white appearance-none pr-8">
+<option value="">Select building type</option>
+<option value="residential">Residential</option>
+<option value="commercial">Commercial</option>
+<option value="industrial">Industrial</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+<i class="ri-arrow-down-s-line text-gray-400"></i>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Total Floor Area (sq ft) *</label>
+<input type="number" id="flrarea" required class="w-full px-4 py-2 bg-white dark:bg-dark-input border-gray-300 dark:border-dark-border border rounded-button focus:ring-2 focus:ring-primary focus:border-primary text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500" placeholder="Enter floor area">
+</div>
+</div>
+</div>
+<div class="form-section" data-step="3">
+<h2 class="text-xl font-semibold mb-6">Fire Safety Measures</h2>
+<div class="space-y-4">
+<div class="flex items-center">
+<input type="checkbox" id="extinguishers" class="w-4 h-4 text-primary border-gray-300 rounded">
+<label for="extinguishers" class="ml-2 block text-sm text-gray-900 dark:text-white">Fire Extinguishers Installed</label>
+</div>
+<div class="flex items-center">
+<input type="checkbox" id="alarms" class="w-4 h-4 text-primary border-gray-300 rounded">
+<label for="alarms" class="ml-2 block text-sm text-gray-900 dark:text-white">Fire Alarm System</label>
+</div>
+<div class="flex items-center">
+<input type="checkbox" id="sprinklers" class="w-4 h-4 text-primary border-gray-300 rounded">
+<label for="sprinklers" class="ml-2 block text-sm text-gray-900 dark:text-white">Sprinkler System</label>
+</div>
+<div class="flex items-center">
+<input type="checkbox" id="exits" class="w-4 h-4 text-primary border-gray-300 rounded">
+<label for="exits" class="ml-2 block text-sm text-gray-900 dark:text-white">Emergency Exits</label>
+</div>
+</div>
+</div>
+<div class="form-section" data-step="4">
+<h2 class="text-xl font-semibold mb-6">Document Upload</h2>
+<div class="space-y-6">
+<div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+<div class="flex justify-center">
+<i class="ri-upload-cloud-line text-4xl text-gray-400"></i>
+</div>
+<p class="mt-2 text-sm text-gray-600">Drag and drop your files here, or click to browse</p>
+<input type="file" multiple class="custom-file-input mt-2 w-full">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Preferred Inspection Date *</label>
+<input type="date" id="idate" required class="w-full px-4 py-2 bg-white dark:bg-dark-input border-gray-300 dark:border-dark-border border rounded-button focus:ring-2 focus:ring-primary focus:border-primary text-gray-900 dark:text-white">
+</div>
+<div class="flex items-start">
+<input type="checkbox" required id="declaration" class="mt-1 w-4 h-4 text-primary border-gray-300 rounded">
+<label for="declaration" class="ml-2 block text-sm text-gray-600">
+I declare that all information provided is true and accurate. I understand that providing false information may result in rejection of the application.
+</label>
+</div>
+</div>
+</div>
+<div class="mt-8 flex justify-between items-center">
+<button type="button" id="prevBtn" class="px-6 py-2 border border-gray-300 dark:border-dark-border rounded-button text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-input cursor-pointer whitespace-nowrap hidden">Previous</button>
+<button type="button" id="nextBtn" class="px-6 py-2 bg-primary text-white rounded-button hover:bg-primary/90 cursor-pointer whitespace-nowrap">Next</button>
+<button type="submit" id="submitBtn" class="px-6 py-2 bg-primary text-white rounded-button hover:bg-primary/90 cursor-pointer whitespace-nowrap hidden"><a href="submit.html">Submit Application</a></button>
+</div>
+</form>
+</main>
+<div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center backdrop-blur-sm">
+<div class="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4 border border-gray-200 dark:border-gray-700">
+<div class="text-center">
+<i class="ri-checkbox-circle-line text-6xl text-secondary"></i>
+<h3 class="mt-4 text-xl font-semibold">Application Submitted Successfully!</h3>
+<p class="mt-2 text-gray-600">Your application reference number is: <span class="font-semibold">NOC-2025-0304</span></p>
+<p class="mt-2 text-gray-600">We will review your application and contact you shortly.</p>
+<button onclick="closeSuccessModal()" class="mt-6 px-6 py-2 bg-primary text-white rounded-button hover:bg-primary/90 cursor-pointer whitespace-nowrap">Close</button>
+</div>
+</div>
+</div>
+<script>
+let currentStep = 1;
+const totalSteps = 4;
+function updateSteps() {
+document.querySelectorAll('.step').forEach((step, index) => {
+if (index + 1 === currentStep) {
+step.classList.remove('step-completed', 'step-pending');
+step.classList.add('step-active');
+} else if (index + 1 < currentStep) {
+step.classList.remove('step-active', 'step-pending');
+step.classList.add('step-completed');
+} else {
+step.classList.remove('step-active', 'step-completed');
+step.classList.add('step-pending');
+}
+});
+document.querySelectorAll('.form-section').forEach((section, index) => {
+if (index + 1 === currentStep) {
+section.classList.add('active');
+} else {
+section.classList.remove('active');
+}
+});
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const submitBtn = document.getElementById('submitBtn');
+prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
+nextBtn.style.display = currentStep === totalSteps ? 'none' : 'block';
+submitBtn.style.display = currentStep === totalSteps ? 'block' : 'none';
+}
+document.getElementById('prevBtn').addEventListener('click', () => {
+if (currentStep > 1) {
+currentStep--;
+updateSteps();
+}
+});
+document.getElementById('nextBtn').addEventListener('click', () => {
+if (currentStep < totalSteps) {
+currentStep++;
+updateSteps();
+}
+});
+document.getElementById('nocForm').addEventListener('submit', (e) => {
+e.preventDefault();
+document.getElementById('successModal').classList.remove('hidden');
+});
+function closeSuccessModal() {
+document.getElementById('successModal').classList.add('hidden');
+}
+updateSteps();
+</script>
+<script>
+document.documentElement.classList.add('dark');
+</script>
+</body>
+</html>

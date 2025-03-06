@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Submitted</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Tailwind custom theme */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+        body {
+            background-color: #1A1A1A;
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center h-screen text-white">
+
+    <!-- 🔥 Header Section -->
+    <header class="absolute top-0 left-0 w-full flex justify-between items-center p-4 bg-[#2A2A2A90] shadow-md">
+        <!-- Logo & Tagline -->
+        <div class="flex items-center space-x-3">
+            <svg class="w-10 h-10 text-[#FF4D4D]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C13 5 17 7 17 11s-3 7-5 9c-2-2-5-5-5-9s4-6 5-9z"/>
+            </svg>
+            <div>
+                <h1 class="text-xl font-bold">Fire Shield</h1>
+                <p class="text-sm text-[#E0E0E0]">Monitoring & Automation System</p>
+            </div>
+        </div>
+
+        <!-- Language Selector & System Status -->
+        <div class="flex items-center space-x-6">
+            <!-- Language Selector -->
+            <div class="flex items-center space-x-2 cursor-pointer">
+                <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                <span class="text-sm">English</span>
+            </div>
+            
+            <!-- System Status -->
+            <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                <span class="text-sm text-[#E0E0E0]">Systems Online</span>
+            </div>
+        </div>
+    </header>
+    <!-- ✅ Success Message Box with White Border -->
+    <div class="bg-[#2A2A2A90] text-center p-8 rounded-lg shadow-lg border-2 border-white">
+        <svg class="w-16 h-16 text-green-500 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707a1 1 0 00-1.414-1.414L9 9.586 7.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+        </svg>
+
+        <h2 class="text-2xl font-bold">Form Submitted Successfully!</h2>
+        <p class="text-[#E0E0E0] mt-2">Your NOC form has been received. Our team will process it soon.</p>
+
+        <div class="mt-6">
+            <a href="homepage.html" class="px-6 py-3 bg-[#FF4D4D] text-white rounded-lg shadow-lg hover:bg-[#FF8C00] transition">
+                Go Back to Home
+            </a>
+        </div>
+    </div>
+</body>
+</html>
